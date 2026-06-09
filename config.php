@@ -1,18 +1,19 @@
 <?php
-// إعدادات الاتصال بقاعدة البيانات المهيأة لبيئة حاويات الدوكر (Docker Containers)
-$db_host = 'db'; // اسم الحاوية الخاصة بقاعدة البيانات في Docker
+// إعدادات الاتصال بقاعدة البيانات لبيئة حاويات الدوكر مع تحديد المنفذ المعدل
+$db_host = 'db'; // اسم حاوية قاعدة البيانات في Docker
 $db_user = 'root';
 $db_pass = 'root_password';
 $db_name = 'laptop_agency_db';
+$db_port = 3306; // المنفذ الداخلي الثابت للحاوية
 
-// إنشاء الاتصال باستخدام مصفوفة mysqli
-$conn = new mysqli($db_host, $db_user, $db_pass, $db_name);
+// إنشاء الاتصال مع تمرير المنفذ لضمان الربط الصحيح
+$conn = new mysqli($db_host, $db_user, $db_pass, $db_name, $db_port);
 
-// التحقق من نجاح الاتصال لمنع انهيار النظام الأساسي
+// التحقق من نجاح الاتصال
 if ($conn->connect_error) {
-    die("Critical Error: Database Connection Failed Context -> " . $conn->connect_error);
+    die("Critical Error: Database Connection Failed -> " . $conn->connect_error);
 }
 
-// توحيد ترميز البيانات إلى UTF-8 لدعم اللغات والرموز بشكل صحيح
+// توحيد ترميز البيانات
 $conn->set_charset("utf8mb4");
 ?>
