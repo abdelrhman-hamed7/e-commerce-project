@@ -3,117 +3,137 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AuraTech Agency - Enterprise Hardware Architecture</title>
-    <!-- استدعاء البوتستراب -->
+    <title>AuraTech Agency - Next-Gen Hardware Infrastructure</title>
+    <!-- text-formatting-toolkit: Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         :root {
-            --dark-blue: #0f172a;    /* كحلي داكن جداً ملكي */
-            --mid-blue: #1e293b;     /* أزرق وسيط للدمج */
-            --luxury-gold: #fca311;  /* الذهبي المضيء للموقع */
+            --cyber-bg-top: #0b0f19;
+            --cyber-bg-bottom: #1e1b4b;
+            --neon-purple: #7c3aed;
+            --neon-cyan: #06b6d4;
             --text-light: #f8fafc;
         }
 
-        /* دمج خلفية الموقع بالكامل بتدرج انسيابي طويل يمنع أي قطع حاد */
+        /* تداخل لوني انسيابي وممتد يدمج الصفحة بالكامل بدون أي قطع حاد */
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(180deg, var(--dark-blue) 0%, var(--mid-blue) 40%, #334155 100%);
+            background: linear-gradient(180deg, var(--cyber-bg-top) 0%, var(--cyber-bg-bottom) 50%, #0f172a 100%);
             color: var(--text-light);
             min-height: 100vh;
-            background-attachment: fixed; /* يجعل التدرج ثابتاً وفخماً أثناء التمرير */
+            background-attachment: fixed;
         }
 
-        /* شريط تنقل شفاف تماماً يطفو فوق الخلفية المتدرجة */
+        /* شريط تنقل شفاف يطير فوق التدرج النيوني */
         .custom-navbar {
             background-color: transparent !important;
             padding: 25px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            border-bottom: 1px solid rgba(6, 182, 212, 0.1);
         }
 
-        .custom-navbar .navbar-brand, .custom-navbar .nav-link {
+        .custom-navbar .navbar-brand {
+            font-weight: 800;
+            letter-spacing: 1px;
+            background: linear-gradient(90deg, #ffffff, var(--neon-cyan));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .custom-navbar .nav-link {
             color: #ffffff !important;
             font-weight: 600;
-            letter-spacing: 0.5px;
             transition: all 0.3s ease;
         }
 
         .custom-navbar .nav-link:hover, .custom-navbar .nav-link.active {
-            color: var(--luxury-gold) !important;
+            color: var(--neon-cyan) !important;
+            text-shadow: 0 0 10px rgba(6, 182, 212, 0.6);
             transform: translateY(-1px);
         }
 
-        /* الـ Hero Section المدمجة بسلاسة مع توسيط احترافي */
+        /* الـ Hero Section مع توسيط الأزرار وتأثيرات الإضاءة */
         .luxury-hero {
-            padding: 100px 0 60px 0;
+            padding: 120px 0 60px 0;
             text-align: center;
         }
 
-        /* تأثيرات الأزرار الذهبية الحركية المضيئة في المنتصف */
-        .btn-gold {
-            background-color: var(--luxury-gold);
-            color: var(--dark-blue) !important;
+        /* أزرار مستقبلية مضيئة وحركية متمركزة في المنتصف تماماً */
+        .btn-cyan {
+            background: linear-gradient(90deg, var(--neon-cyan), #0891b2);
+            color: #0b0f19 !important;
             font-weight: 700;
-            border: 2px solid var(--luxury-gold);
+            border: none;
             border-radius: 30px;
-            padding: 14px 35px;
+            padding: 14px 38px;
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            box-shadow: 0 0 20px rgba(252, 163, 17, 0.4);
+            box-shadow: 0 0 20px rgba(6, 182, 212, 0.4);
         }
 
-        .btn-gold:hover {
-            background-color: transparent;
-            color: var(--luxury-gold) !important;
+        .btn-cyan:hover {
             transform: translateY(-4px);
-            box-shadow: 0 0 30px rgba(252, 163, 17, 0.7);
+            box-shadow: 0 0 35px rgba(6, 182, 212, 0.8);
         }
 
-        .btn-outline-gold {
-            border: 2px solid rgba(252, 163, 17, 0.6);
-            color: var(--luxury-gold) !important;
+        .btn-outline-purple {
+            border: 2px solid rgba(124, 58, 237, 0.6);
+            color: #ffffff !important;
             font-weight: 700;
             border-radius: 30px;
-            padding: 14px 35px;
+            padding: 14px 38px;
             transition: all 0.4s ease;
+            backdrop-filter: blur(5px);
         }
 
-        .btn-outline-gold:hover {
-            background-color: var(--luxury-gold);
-            color: var(--dark-blue) !important;
-            border-color: var(--luxury-gold);
+        .btn-outline-purple:hover {
+            background: linear-gradient(90deg, var(--neon-purple), #6d28d9);
+            border-color: var(--neon-purple);
             transform: translateY(-4px);
-            box-shadow: 0 0 25px rgba(252, 163, 17, 0.4);
+            box-shadow: 0 0 25px rgba(124, 58, 237, 0.6);
         }
 
-        /* الفكرة الواو: مستطيلات زجاجية شبه شفافة ممتدة (Glassmorphic Long Rectangles) */
+        /* مستطيلات زجاجية سيبرانية شبه شفافة ممتدة بعرض الصفحة */
         .glass-rectangle {
-            background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(12px); /* عمل تأثير ضبابي فخم للخلفية المتدرجة */
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.07);
-            border-left: 5px solid var(--luxury-gold); /* الحافة الذهبية المميزة لمستطيلاتكِ */
-            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-left: 5px solid var(--neon-cyan);
+            border-radius: 14px;
             padding: 40px;
             transition: all 0.4s ease;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
         }
         
         .glass-rectangle:hover {
             transform: translateY(-5px) scale(1.005);
-            background: rgba(255, 255, 255, 0.06);
-            border-color: rgba(252, 163, 17, 0.3);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            background: rgba(255, 255, 255, 0.04);
+            border-color: rgba(6, 182, 212, 0.3);
+            box-shadow: 0 20px 40px rgba(6, 182, 212, 0.2);
         }
-   .badge-gold {
-            background-color: rgba(252, 163, 17, 0.15);
-            color: var(--luxury-gold);
-            border: 1px solid rgba(252, 163, 17, 0.3);
+      /* تنسيق الصور داخل المستطيل الزجاجي */
+        .product-img-home {
+            max-height: 120px;
+            object-fit: contain;
+            filter: drop-shadow(0 0 12px rgba(6, 182, 212, 0.2));
+            transition: transform 0.3s ease;
+        }
+
+        .glass-rectangle:hover .product-img-home {
+            transform: scale(1.08) rotate(2deg);
+        }
+
+        .badge-cyan {
+            background-color: rgba(6, 182, 212, 0.1);
+            color: var(--neon-cyan);
+            border: 1px solid rgba(6, 182, 212, 0.3);
             font-weight: 600;
+            letter-spacing: 0.5px;
         }
     </style>
 </head>
 <body>
 
-    <!-- شريط القائمة العلوية الشفاف والمنساب مع الخلفية -->
+    <!-- القائمة العلوية الشفافة الموحدة -->
     <nav class="navbar navbar-expand-lg custom-navbar">
         <div class="container-fluid px-5">
             <a class="navbar-brand fw-bold fs-3" href="index.php">AuraTech Agency</a>
@@ -132,80 +152,89 @@
         </div>
     </nav>
 
-    <!-- واجهة الـ Hero الاحترافية المتمركزة في قلب التدرج اللوني -->
-    <header class="luxury-hero text-center">
+    <!-- واجهة الـ Hero -->
+    <header class="luxury-hero">
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-lg-10">
-                    <span class="badge mb-4 fw-bold px-4 py-2 rounded-pill fs-6 badge-gold">
+                    <span class="badge mb-4 fw-bold px-4 py-2 rounded-pill fs-6 badge-cyan">
                         Authorized Agency - Rwanda
                     </span>
-                    <h1 class="display-2 fw-bold mb-4" style="letter-spacing: -1px; background: linear-gradient(180deg, #ffffff 60%, #cbd5e1 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+                    <h1 class="display-2 fw-bold mb-4" style="letter-spacing: -1px; background: linear-gradient(180deg, #ffffff 50%, #94a3b8 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
                         Enterprise Computing &<br>Hardware Architecture
                     </h1>
                     <p class="lead text-light opacity-75 mb-5 fs-4 mx-auto" style="max-width: 750px;">
                         Powering the next computing generation. AuraTech provides original enterprise devices with certified manufacturer warranty matrices.
                     </p>
                     
-                    <!-- الأزرار الفخمة والمضيئة الممركزة في المنتصف تماماً -->
                     <div class="d-flex gap-4 justify-content-center">
-                        <a href="products.php" class="btn btn-gold btn-lg px-5 py-3 fs-5">Explore Certified Inventory</a>
-                        <a href="contact.php" class="btn btn-outline-gold btn-lg px-5 py-3 fs-5">Request Enterprise Quote</a>
+                        <a href="products.php" class="btn btn-cyan btn-lg px-5 py-3 fs-5">Explore Certified Inventory</a>
+                        <a href="contact.php" class="btn btn-outline-purple btn-lg px-5 py-3 fs-5">Request Enterprise Quote</a>
                     </div>
                 </div>
             </div>
         </div>
     </header>
 
-    <!-- مساحة محتوى المستطيلات الطويلة المنسابة مع تدرج الخلفية -->
     <main class="container-fluid my-5 px-5">
-        
-        <!-- مستطيل الميزات الزجاجي الممتد بعرض الصفحة -->
+        <!-- مستطيل الميزات الزجاجي الممتد -->
         <div class="row glass-rectangle mb-5 align-items-center mx-1">
             <div class="col-md-12">
-                <h2 class="fw-bold mb-3" style="color: var(--luxury-gold);">Why AuraTech Enterprise Logistics?</h2>
+                <h2 class="fw-bold mb-3" style="color: var(--neon-cyan); text-shadow: 0 0 10px rgba(6, 182, 212, 0.3);">Why AuraTech Enterprise Logistics?</h2>
                 <p class="fs-5 text-light opacity-75 mb-0" style="line-height: 1.8;">
                     We register every hardware serial number directly with official manufacturer diagnostics databases. Whether you are building an engineering simulation rig, setting up a student dev environment, or equipping an entire corporate lab network, our computing assets pass deep pipeline validation parameters before deployment.
                 </p>
             </div>
         </div>
-
-        <!-- عنوان قسم عرض الـ Profile للأجهزة المتاح محاكاتها -->
+          <!-- عنوان قسم أحدث 3 منتجات -->
         <div class="row my-5 mx-1">
             <div class="col-12">
-                <h3 class="fw-bold border-bottom border-secondary pb-3 text-white">Featured Hardware Profile</h3>
+                <h3 class="fw-bold border-bottom border-secondary pb-3 text-white" style="letter-spacing: 0.5px;">Featured Hardware Profile</h3>
             </div>
         </div>
-     <!-- عرض أحدث 3 منتجات بنظام المستطيلات الزجاجية الشفافة الممتدة الفخمة جداً -->
+
+        <!-- 👇 عرض المنتجات بالمستطيلات الزجاجية الطويلة مع عرض الصور حركياً -->
         <?php
+        // قمنا بربط أسماء الصور الحقيقية هنا بناءً على عمود image_url في قاعدة بياناتكِ
         $featured_products = [
-            ['name' => 'High-Performance Architecture Laptop', 'desc' => 'Next-gen processing units optimized for heavy engineering code compile matrices.', 'price' => '1,299.00', 'tag' => 'Laptop'],
-            ['name' => 'Enterprise Simulation Workstation', 'desc' => 'Certified high-end dev environments with integrated cloud deployment hardware.', 'price' => '1,850.00', 'tag' => 'Laptop'],
-            ['name' => 'Official Microcontroller Interface Kit', 'desc' => 'Hardware components calibrated for embedded IoT system architecture.', 'price' => '89.00', 'tag' => 'Accessory']
+            ['name' => 'HP ProBook 450 G10', 'desc' => 'Intel Core i7, 16GB RAM, 512GB SSD. Official 1-year warranty.', 'price' => '850.00', 'tag' => 'Laptop', 'img' => 'hp_probook.png'],
+            ['name' => 'Dell XPS 15 Ultra', 'desc' => 'Intel Core i9, 32GB RAM, 1TB SSD, NVIDIA RTX 4050.', 'price' => '1,899.00', 'tag' => 'Laptop', 'img' => 'dell_xps.png'],
+            ['name' => 'Logitech MX Master 3S', 'desc' => 'Performance wireless mouse, ergonomic silent design.', 'price' => '99.00', 'tag' => 'Accessory', 'img' => 'logitech_mouse.png']
         ];
 
         foreach($featured_products as $prod):
         ?>
         <div class="row glass-rectangle mb-4 align-items-center mx-1">
-            <div class="col-md-9">
-                <span class="badge badge-gold mb-2"><?php echo $prod['tag']; ?></span>
+            <!-- 📷 عمود عرض صورة المنتج داخل المستطيل الطويل -->
+            <div class="col-md-2 text-center mb-3 mb-md-0">
+                <img src="assets/images/products/<?php echo $prod['img']; ?>" 
+                     alt="<?php echo $prod['name']; ?>" 
+                     class="img-fluid product-img-home"
+                     onerror="this.src='assets/images/products/default.jpg'"> 
+                     <!-- 💡 في حال لم تكن الصورة موجودة بعد، سيقوم تلقائياً بعرض الصورة الافتراضية حتى لا ينكسر الديزاين -->
+            </div>
+
+            <!-- 📝 تفاصيل ومواصفات المنتج -->
+            <div class="col-md-7">
+                <span class="badge badge-cyan mb-2"><?php echo $prod['tag']; ?></span>
                 <h4 class="fw-bold mb-2 text-white"><?php echo $prod['name']; ?></h4>
                 <p class="text-light opacity-50 mb-0 fs-5"><?php echo $prod['desc']; ?></p>
             </div>
+
+            <!-- 💰 السعر وزر الانتقال -->
             <div class="col-md-3 text-md-end text-center mt-3 mt-md-0">
-                <h3 class="fw-bold mb-3" style="color: var(--luxury-gold);">$<?php echo $prod['price']; ?></h3>
-                <a href="products.php" class="btn btn-outline-gold btn-sm px-4 py-2">View in Inventory</a>
+                <h3 class="fw-bold mb-3" style="color: var(--neon-cyan); text-shadow: 0 0 15px rgba(6, 182, 212, 0.4);">$<?php echo $prod['price']; ?></h3>
+                <a href="products.php" class="btn btn-outline-purple btn-sm px-4 py-2">View in Inventory</a>
             </div>
         </div>
         <?php endforeach; ?>
     </main>
 
-    <!-- التذييل المدمج النهائي والموثق باسمكِ -->
-    <footer class="text-center py-4 mt-5" style="background: rgba(15, 23, 42, 0.6); border-top: 1px solid rgba(252, 163, 17, 0.2);">
+    <footer class="text-center py-4 mt-5" style="background: rgba(11, 15, 25, 0.8); border-top: 1px solid rgba(6, 182, 212, 0.1);">
         <p class="mb-0 text-light opacity-50">&copy; 2026 AuraTech Agency. Designed by Reem Osama.</p>
     </footer>
 
-    <!-- ملفات الجافاسكريبت للبوتستراب -->
+    <!-- Bootstrap JS Bundle -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-</html>        
+</html>
