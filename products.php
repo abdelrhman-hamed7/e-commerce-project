@@ -296,13 +296,13 @@ $search_query = isset($_GET['search']) ? $_GET['search'] : '';
             <?php else: ?>
             <header class="mb-5">
                 <h1 class="display-4 fw-bold text-white mb-1">All Products</h1>
-                <p class="text-light opacity-50 fs-5">Browse corporate-grade assets with live database diagnostics.</p>
+                <p class="text-light opacity-50 fs-5">Browse Available Assets</p>
             </header>
 
             <div class="row g-4">
                 <aside class="col-lg-3">
                     <div class="filter-sidebar">
-                        <h4 class="fw-bold mb-4 text-white"><i class="bi bi-sliders2-vertical me-2" style="color: var(--neon-cyan);"></i>Filters Matrix</h4>
+                        <h4 class="fw-bold mb-4 text-white"><i class="bi bi-sliders2-vertical me-2" style="color: var(--neon-cyan);"></i>Filters </h4>
                         
                         <form action="products.php" method="GET" class="mb-4">
                             <label class="form-label opacity-75 small fw-bold text-uppercase">Search Asset</label>
