@@ -19,8 +19,8 @@ if ($product_id > 0 && !empty($action)) {
     
     // 1. إضافة منتج للسلة
     if ($action === 'add') {
-        // التحقق من وجود المنتج وسعره في قاعدة البيانات لمنع التلاعب
-        $sql = "SELECT name, price, stock_quantity FROM products WHERE id = ?";
+        // 🛠️ تم التعديل هنا: جلب حقل brand و image_url مباشرة من قاعدة البيانات لحل مشكلة تفاصيل السلة
+        $sql = "SELECT name, price, stock_quantity, brand, image_url FROM products WHERE id = ?";
         $stmt = $conn->prepare($sql);
         $stmt->bind_param("i", $product_id);
         $stmt->execute();
@@ -38,10 +38,12 @@ if ($product_id > 0 && !empty($action)) {
                     $_SESSION['cart'][$product_id]['quantity'] = $product['stock_quantity'];
                 }
             } else {
-                // إضافة المنتج لأول مرة في المصفوفة
+                // 🛠️ تم التعديل هنا: حفظ الـ brand والـ image_url داخل الـ Session لأول مرة
                 $_SESSION['cart'][$product_id] = [
                     'name' => $product['name'],
                     'price' => $product['price'],
+                    'brand' => $product['brand'] ?? 'AuraTech Product',
+                    'image_url' => $product['image_url'] ?? 'default.jpg',
                     'quantity' => min($quantity, $product['stock_quantity'])
                 ];
             }
