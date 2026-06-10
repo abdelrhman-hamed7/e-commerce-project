@@ -179,8 +179,8 @@ session_start();
                     </p>
                     
                     <div class="d-flex gap-4 justify-content-center">
-                        <a href="products.php" class="btn btn-cyan btn-lg px-5 py-3 fs-5">Explore Certified Inventory</a>
-                        <a href="contact.php" class="btn btn-outline-purple btn-lg px-5 py-3 fs-5">Request Enterprise Quote</a>
+                        <a href="products.php" class="btn btn-cyan btn-lg px-5 py-3 fs-5">Explore  Inventory</a>
+                        <a href="contact.php" class="btn btn-outline-purple btn-lg px-5 py-3 fs-5">Book cunsultation</a>
                     </div>
                 </div>
             </div>
