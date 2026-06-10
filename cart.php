@@ -14,7 +14,7 @@ $subtotal = 0;
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shopping Cart Matrix | AuraTech Agency</title>
+    <title>Shopping Cart  | AuraTech Agency</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
     <style>
@@ -237,17 +237,17 @@ $subtotal = 0;
 
     <div class="container my-5">
         <header class="mb-5">
-            <h1 class="display-4 fw-bold text-white mb-1"><i class="bi bi-cart3 me-3" style="color: var(--neon-cyan);"></i>Shopping Cart Matrix</h1>
+            <h1 class="display-4 fw-bold text-white mb-1"><i class="bi bi-cart3 me-3" style="color: var(--neon-cyan);"></i>Shopping Cart </h1>
             <p class="text-light opacity-50 fs-5" style="color: #ffffff !important; opacity: 0.7 !important;">Review committed hardware units before compiling order execution.</p>
         </header>
 
         <?php if (empty($cart_items)): ?>
             <div class="cart-cyber-card text-center py-5">
                 <i class="bi bi-basket3 fs-1 opacity-25 d-block mb-3" style="color: var(--neon-cyan);"></i>
-                <h3 class="fw-bold mb-3 text-white">Your Cart Matrix is Empty</h3>
-                <p class="text-white opacity-75 mb-4">No enterprise deployment assets have been allocated yet.</p>
+                <h3 class="fw-bold mb-3 text-white">Your Cart  is Empty</h3>
+                <p class="text-white opacity-75 mb-4">No items selected yet.</p>
                 <a href="products.php" class="btn btn-cyber-action btn-neon-cyan px-4 py-2">
-                    <i class="bi bi-arrow-left me-2"></i>Return to Hardware Inventory
+                    <i class="bi bi-arrow-left me-2"></i>Continue shopping
                 </a>
             </div>
         <?php else: ?>
@@ -343,7 +343,7 @@ $subtotal = 0;
 
                 <div class="col-lg-4">
                     <div class="cart-cyber-card">
-                        <h4 class="fw-bold mb-4 pb-2 border-bottom border-secondary border-opacity-25 text-white">Execution Summary</h4>
+                        <h4 class="fw-bold mb-4 pb-2 border-bottom border-secondary border-opacity-25 text-white"> Summary</h4>
                         
                         <div class="summary-row">
                             <span>Allocated Units Subtotal:</span>

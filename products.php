@@ -29,9 +29,7 @@ $search_query = isset($_GET['search']) ? $_GET['search'] : '';
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php echo $view_details ? htmlspecialchars($product['name']) . " | Specs" : "Certified Inventory | AuraTech Agency"; ?></title>
-    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Bootstrap Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
     <style>
         :root {
@@ -87,7 +85,7 @@ $search_query = isset($_GET['search']) ? $_GET['search'] : '';
             box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
         }
 
-        /* بطاقات المنتجات العرضية */
+        /* بطاقات المنتجات العرضية وتعديل تمدد الصور */
         .product-cyber-card, .details-cyber-card {
             background: rgba(255, 255, 255, 0.07);
             backdrop-filter: blur(20px);
@@ -104,6 +102,7 @@ $search_query = isset($_GET['search']) ? $_GET['search'] : '';
             display: flex;
             flex-direction: column;
             justify-content: space-between;
+            overflow: hidden; /* لضمان عدم خروج حواف الصورة عن انحناء الكرت */
         }
 
         .product-cyber-card:hover {
@@ -112,22 +111,33 @@ $search_query = isset($_GET['search']) ? $_GET['search'] : '';
             border-color: var(--neon-cyan);
             box-shadow: 0 20px 40px rgba(6, 182, 212, 0.2);
         }
+
+        /* تعديل الحاوية لتملأ العرض الكامل للكرت بدون هوامش داخلية جانباً وبإرتفاع مناسب */
         .product-img-container {
             background: rgba(11, 15, 25, 0.4);
             border-radius: 10px;
-            padding: 20px;
-            margin-bottom: 15px;
+            margin-left: -25px;
+            margin-right: -25px;
+            margin-top: -25px;
+            margin-bottom: 20px;
             display: flex;
             align-items: center;
             justify-content: center;
-            height: 160px;
+            height: 220px; /* زيادة الارتفاع لتبدو الصورة بارزة وتملأ المساحة */
+            overflow: hidden;
         }
 
+        /* جعل الصورة تملأ كامل مساحة الحاوية بشكل كامل ومتناسق */
         .product-img-inventory {
-            max-height: 120px;
-            object-fit: contain;
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* تجعل الصورة تملأ المساحة بالكامل دون تشويه الأبعاد */
             filter: drop-shadow(0 0 10px rgba(6, 182, 212, 0.2));
             transition: transform 0.3s ease;
+        }
+
+        .product-cyber-card:hover .product-img-inventory {
+            transform: scale(1.04); /* تأثير زووم خفيف عند تمرير الماوس */
         }
 
         .badge-cyan {
@@ -196,7 +206,6 @@ $search_query = isset($_GET['search']) ? $_GET['search'] : '';
 </head>
 <body>
 
-    <!-- القائمة العلوية الموحدة المضيئة -->
     <nav class="navbar navbar-expand-lg custom-navbar">
         <div class="container-fluid px-5">
             <a class="navbar-brand fw-bold fs-3" href="products.php">AuraTech Agency</a>
@@ -219,7 +228,6 @@ $search_query = isset($_GET['search']) ? $_GET['search'] : '';
     <div class="container-fluid px-5 my-4">
 
         <?php if ($view_details): ?>
-            <!-- ==================== 🛠️ القسم الأول: عرض تفاصيل منتج معين ==================== -->
             <div class="mb-4">
                 <a href="products.php" class="text-decoration-none style-back-link" style="color: var(--neon-cyan);">
                     <i class="bi bi-arrow-left me-2"></i>Back to Authorized Inventory
@@ -257,7 +265,6 @@ $search_query = isset($_GET['search']) ? $_GET['search'] : '';
                             </tbody>
                         </table>
 
-                        <!-- فورم إضافة المنتج للسلة المربوط بـ cart_action.php جاهز ومفعل تلقائياً -->
                         <form action="cart_action.php" method="POST" class="mt-4">
                             <input type="hidden" name="product_id" value="<?php echo $product['id']; ?>">
                             <input type="hidden" name="action" value="add">
@@ -277,14 +284,12 @@ $search_query = isset($_GET['search']) ? $_GET['search'] : '';
                 </div>
             </div>
             <?php else: ?>
-            <!-- ==================== 💻 القسم الثاني: عرض الشبكة العرضية مع الفلاتر الجانبية ==================== -->
             <header class="mb-5">
                 <h1 class="display-4 fw-bold text-white mb-1">Hardware Ecosystem Architecture</h1>
                 <p class="text-light opacity-50 fs-5">Browse corporate-grade assets with live database diagnostics.</p>
             </header>
 
             <div class="row g-4">
-                <!-- 🔍 الجانب الأيسر: لوحة الفلاتر الذكية -->
                 <aside class="col-lg-3">
                     <div class="filter-sidebar">
                         <h4 class="fw-bold mb-4 text-white"><i class="bi bi-sliders2-vertical me-2" style="color: var(--neon-cyan);"></i>Filters Matrix</h4>
@@ -308,7 +313,6 @@ $search_query = isset($_GET['search']) ? $_GET['search'] : '';
                     </div>
                 </aside>
 
-                <!-- 💻 الجانب الأيمن: عرض جرد المنتجات العرضية المستخرجة ديناميكياً من قاعدة البيانات -->
                 <main class="col-lg-9">
                     <div class="row g-4">
                         <?php
@@ -323,7 +327,8 @@ $search_query = isset($_GET['search']) ? $_GET['search'] : '';
                             $query .= " AND (name LIKE '%" . $conn->real_escape_string($search_query) . "%' OR description LIKE '%" . $conn->real_escape_string($search_query) . "%' OR brand LIKE '%" . $conn->real_escape_string($search_query) . "%')";
                         }
 
-                        $query .= " ORDER BY id DESC";
+                        // التعديل هنا فقط لترتيب الأنواع: اللابتوب أولاً ثم الإكسسوارات
+                        $query .= " ORDER BY FIELD(product_type, 'Laptop', 'Accessory'), id DESC";
 
                         $db_result = $conn->query($query);
                         $displayed_count = 0;
@@ -354,7 +359,6 @@ $search_query = isset($_GET['search']) ? $_GET['search'] : '';
                                         <span class="fs-4 fw-bold" style="color: var(--neon-cyan); font-family: sans-serif;">$<?php echo number_format($prod['price'], 2); ?></span>
                                     </div>
                                     <div class="d-grid gap-2 d-flex">
-                                        <!-- زر عرض المواصفات الذي يعيد تحميل نفس الصفحة ممرراً معرّف الـ ID -->
                                         <a href="products.php?id=<?php echo $prod['id']; ?>" class="btn btn-sm btn-view-details flex-grow-1">
                                             <i class="bi bi-eye me-1"></i> Specs
                                         </a>
@@ -388,11 +392,9 @@ $search_query = isset($_GET['search']) ? $_GET['search'] : '';
 
     </div>
 
-    <!-- التذييل الموحد الموثق باسمكِ -->
     <footer class="text-center py-4 mt-5" style="background: rgba(11, 15, 25, 0.8); border-top: 1px solid rgba(6, 182, 212, 0.1);">
         <div class="container"><small class="text-light opacity-50">&copy; 2026 AuraTech Agency. Designed by Reem Osama.</small></div>
     </footer>
-    <!-- Bootstrap JS Bundle -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
