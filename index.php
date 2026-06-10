@@ -1,5 +1,5 @@
 <?php
-// 1. تفعيل الجلسة في أول السطر لقراءة حالة تسجيل الدخول من ملف auth.php
+// 1. Session initialization at the absolute top
 session_start();
 ?>
 <!DOCTYPE html>
@@ -9,6 +9,7 @@ session_start();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AuraTech Agency - Next-Gen Hardware Infrastructure</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <style>
         :root {
             --cyber-bg-top: #0b0f19;
@@ -18,7 +19,7 @@ session_start();
             --text-light: #f8fafc;
         }
 
-        /* تداخل لوني انسيابي وممتد يدمج الصفحة بالكامل بدون أي قطع حاد */
+        /* Continuous gradient flow across the entire viewport execution plane */
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(180deg, var(--cyber-bg-top) 0%, var(--cyber-bg-bottom) 50%, #0f172a 100%);
@@ -27,7 +28,7 @@ session_start();
             background-attachment: fixed;
         }
 
-        /* شريط تنقل شفاف يطير فوق التدرج النيوني */
+        /* Your exact original floating transparent navbar structure */
         .custom-navbar {
             background-color: transparent !important;
             padding: 25px 0;
@@ -54,36 +55,12 @@ session_start();
             transform: translateY(-1px);
         }
 
-        /* تخصيص مظهر الزر والقائمة المنسدلة للمستخدم لتطابق الثيم النيوني */
-        .user-dropdown-btn {
-            color: var(--neon-cyan) !important;
-            font-weight: 700;
-            text-shadow: 0 0 8px rgba(6, 182, 212, 0.4);
-        }
-        
-        .custom-dropdown-menu {
-            background-color: #0b0f19 !important;
-            border: 1px solid rgba(6, 182, 212, 0.2) !important;
-            border-radius: 4px;
-        }
-
-        .custom-dropdown-menu .dropdown-item {
-            color: #ffffff !important;
-            transition: all 0.2s ease;
-        }
-
-        .custom-dropdown-menu .dropdown-item:hover {
-            background-color: rgba(6, 182, 212, 0.1) !important;
-            color: var(--neon-cyan) !important;
-        }
-
-        /* ال... Hero Section مع توسيط الأزرار وتأثيرات الإضاءة */
+        /* Hero Section illumination parameters */
         .luxury-hero {
             padding: 120px 0 60px 0;
             text-align: center;
         }
 
-        /* أزرار مستقبلية مضيئة وحركية متمركزة في المنتصف تماماً */
         .btn-cyan {
             background: linear-gradient(90deg, var(--neon-cyan), #0891b2);
             color: #0b0f19 !important;
@@ -117,7 +94,7 @@ session_start();
             box-shadow: 0 0 25px rgba(124, 58, 237, 0.6);
         }
 
-        /* مستطيلات زجاجية سيبرانية شبه شفافة ممتدة بعرض الصفحة */
+        /* Glass morphism engineering plates spanning full layout metrics */
         .glass-rectangle {
             background: rgba(255, 255, 255, 0.02);
             backdrop-filter: blur(15px);
@@ -137,7 +114,6 @@ session_start();
             box-shadow: 0 20px 40px rgba(6, 182, 212, 0.2);
         }
         
-        /* تنسيق الصور داخل المستطيل الزجاجي */
         .product-img-home {
             max-height: 120px;
             object-fit: contain;
@@ -175,18 +151,13 @@ session_start();
                     <a class="nav-item nav-link" href="contact.php">Contact Us</a>
                     
                     <?php if (isset($_SESSION['user_id'])): ?>
-                        <div class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle user-dropdown-btn" href="#" id="authDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                Admin: <?php echo htmlspecialchars($_SESSION['user_name']); ?>
-                            </a>
-                            <ul class="dropdown-menu dropdown-menu-end custom-dropdown-menu" aria-labelledby="authDropdown">
-                                <li><a class="dropdown-item" href="admin_dashboard.php">Control Dashboard</a></li>
-                                <li><hr class="dropdown-divider bg-secondary"></li>
-                                <li><a class="dropdown-item text-danger" href="logout.php">Logout</a></li>
-                            </ul>
-                        </div>
+                        <a class="nav-item nav-link" href="auth.php" title="Manage Portal" style="color: var(--neon-cyan) !important; text-shadow: 0 0 10px rgba(6, 182, 212, 0.6);">
+                            <i class="bi bi-person-badge-fill"></i>
+                        </a>
                     <?php else: ?>
-                        <a href="auth.php" class="btn btn-outline-purple btn-sm px-4 py-2 fs-6" style="border-radius: 20px;">Portal Login</a>
+                        <a class="nav-item nav-link" href="auth.php" title="Portal Login">
+                            <i class="bi bi-person-badge"></i>
+                        </a>
                     <?php endif; ?>
                 </div>
             </div>
