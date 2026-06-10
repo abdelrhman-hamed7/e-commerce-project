@@ -220,7 +220,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
     <?php endif; ?>
 
     <div id="loginSection">
-        <h3 class="mb-4" style="font-weight: 600; letter-spacing: 0.5px;">Account Verification</h3>
+        <h3 class="mb-4" style="font-weight: 600; letter-spacing: 0.5px;">Login</h3>
         <form action="auth.php" method="POST">
             <div class="row g-3">
                 <div class="col-md-6">
@@ -232,13 +232,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
                     <input type="password" name="password" class="form-control form-control-auratech" required>
                 </div>
                 <div class="col-12 mt-4">
-                    <button type="submit" name="login" class="btn btn-auratech-submit w-100">Authorize System Access</button>
+                    <button type="submit" name="login" class="btn btn-auratech-submit w-100">Sign In</button>
                 </div>
             </div>
         </form>
         <div class="mt-4 text-center">
             <span class="opacity-50">Need a new identity console?</span> 
-            <span class="toggle-section-link ms-2" onclick="toggleAuthSections()">Create Admin Account</span>
+            <span class="toggle-section-link ms-2" onclick="toggleAuthSections()">Create New Account</span>
         </div>
     </div>
 
@@ -247,7 +247,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['login'])) {
         <form action="auth.php" method="POST">
             <div class="row g-3">
                 <div class="col-md-6">
-                    <label class="form-label">Preferred Username</label>
+                    <label class="form-label"> Username</label>
                     <input type="text" name="username" class="form-control form-control-auratech" required autocomplete="off">
                 </div>
                 <div class="col-md-6">
