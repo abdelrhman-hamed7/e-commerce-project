@@ -1,4 +1,14 @@
 <?php
+// Initialize session handling
+session_start();
+
+// Session Gate Control: Redirect unauthenticated nodes to the login portal
+if (!isset($_SESSION['user_id'])) {
+    header("Location: auth.php");
+    exit();
+}
+?>
+<?php
 require_once "config.php";
 
 // 1. فحص ما إذا كان المستخدم يطلب تفاصيل منتج معين (Specs)
@@ -230,7 +240,7 @@ $search_query = isset($_GET['search']) ? $_GET['search'] : '';
         <?php if ($view_details): ?>
             <div class="mb-4">
                 <a href="products.php" class="text-decoration-none style-back-link" style="color: var(--neon-cyan);">
-                    <i class="bi bi-arrow-left me-2"></i>Back to Authorized Inventory
+                    <i class="bi bi-arrow-left me-2"></i>Back to  Inventory
                 </a>
             </div>
     <div class="details-cyber-card p-5">
@@ -285,7 +295,7 @@ $search_query = isset($_GET['search']) ? $_GET['search'] : '';
             </div>
             <?php else: ?>
             <header class="mb-5">
-                <h1 class="display-4 fw-bold text-white mb-1">Hardware Ecosystem Architecture</h1>
+                <h1 class="display-4 fw-bold text-white mb-1">All Products</h1>
                 <p class="text-light opacity-50 fs-5">Browse corporate-grade assets with live database diagnostics.</p>
             </header>
 
