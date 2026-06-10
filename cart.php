@@ -1,4 +1,13 @@
 <?php
+// Initialize session handling
+session_start();
+
+// Session Gate Control: Redirect unauthenticated nodes to the login portal
+if (!isset($_SESSION['user_id'])) {
+    header("Location: auth.php");
+    exit();
+}
+?><?php
 require_once "config.php";
 
 // بدء الجلسة إذا لم تكن بدأت بعد لجلب منتجات السلة
