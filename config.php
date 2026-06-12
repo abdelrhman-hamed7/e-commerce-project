@@ -1,19 +1,12 @@
 <?php
-// إعدادات الاتصال بقاعدة البيانات لبيئة حاويات الدوكر مع تحديد المنفذ المعدل
-$db_host = 'db'; // اسم حاوية قاعدة البيانات في Docker
-$db_user = 'root';
-$db_pass = 'root_password';
-$db_name = 'laptop_agency_db';
-$db_port = 3306; // المنفذ الداخلي الثابت للحاوية
 
-// إنشاء الاتصال مع تمرير المنفذ لضمان الربط الصحيح
-$conn = new mysqli($db_host, $db_user, $db_pass, $db_name, $db_port);
-
-// التحقق من نجاح الاتصال
-if ($conn->connect_error) {
-    die("Critical Error: Database Connection Failed -> " . $conn->connect_error);
+try {
+    $pdo = new PDO(getenv("postgresql://laptop_agency_db_user:73FLP2oCrT2bIQJ9RgUba4gWqkuUC2Qc@dpg-d8ls8vl8nd3s73a6hogg-a.oregon-postgres.render.com/laptop_agency_db"));
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+    
+} catch (PDOException $e) {
+    die("Database Connection Failed: " . $e->getMessage());
 }
 
-// توحيد ترميز البيانات
-$conn->set_charset("utf8mb4");
 ?>
