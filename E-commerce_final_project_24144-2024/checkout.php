@@ -41,6 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             INSERT INTO orders
             (customer_name, customer_email, customer_phone, delivery_address, payment_method, total_amount)
             VALUES (?, ?, ?, ?, ?, ?)
+            RETURNING id
         ");
 
         $stmt->execute([
@@ -52,7 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $total_amount
         ]);
 
-        $order_id = $pdo->lastInsertId();
+        $order_id = $stmt->fetchColumn();
 
         /* 2. INSERT ORDER ITEMS + UPDATE STOCK */
         foreach ($cart_items as $product_id => $item) {

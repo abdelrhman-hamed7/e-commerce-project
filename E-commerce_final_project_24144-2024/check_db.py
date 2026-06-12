@@ -1,7 +1,8 @@
 import os
 import sys
 
-import pymysql
+import psycopg2
+import psycopg2.extras
 
 
 def env_value(name, default=None, required=False):
@@ -12,24 +13,34 @@ def env_value(name, default=None, required=False):
     return value
 
 
-connection = pymysql.connect(
-    host=env_value("DB_HOST", "127.0.0.1"),
-    port=int(env_value("DB_PORT", "3306")),
-    user=env_value("DB_USERNAME", required=True),
-    password=env_value("DB_PASSWORD", ""),
-    database=env_value("DB_DATABASE", required=True),
-    cursorclass=pymysql.cursors.DictCursor,
-)
+database_url = os.getenv("DATABASE_URL")
+
+if database_url:
+    connection = psycopg2.connect(database_url)
+else:
+    connection = psycopg2.connect(
+        host=env_value("DB_HOST", "127.0.0.1"),
+        port=int(env_value("DB_PORT", "5432")),
+        user=env_value("DB_USERNAME", required=True),
+        password=env_value("DB_PASSWORD", ""),
+        dbname=env_value("DB_DATABASE", required=True),
+        sslmode=env_value("DB_SSLMODE"),
+    )
 
 try:
-    with connection.cursor() as cursor:
-        cursor.execute("SHOW TABLES;")
+    with connection.cursor(cursor_factory=psycopg2.extras.DictCursor) as cursor:
+        cursor.execute("""
+            SELECT table_name
+            FROM information_schema.tables
+            WHERE table_schema = 'public'
+            ORDER BY table_name;
+        """)
         tables = cursor.fetchall()
 
-        print("MySQL connection OK")
+        print("PostgreSQL connection OK")
         print("Tables:")
         for table in tables:
-            print("-", next(iter(table.values())))
+            print("-", table["table_name"])
 
         cursor.execute("SELECT name, price, stock_quantity FROM products LIMIT 5;")
         rows = cursor.fetchall()

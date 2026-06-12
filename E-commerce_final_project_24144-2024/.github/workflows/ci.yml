@@ -9,15 +9,16 @@ jobs:
     runs-on: ubuntu-latest
 
     services:
-      mysql:
-        image: mysql:8.0
+      postgres:
+        image: postgres:16
         env:
-          MYSQL_ALLOW_EMPTY_PASSWORD: yes
-          MYSQL_DATABASE: laptop_agency_db
+          POSTGRES_DB: laptop_agency_db
+          POSTGRES_USER: auratech_user
+          POSTGRES_PASSWORD: test_password
         ports:
-          - 3306:3306
+          - 5432:5432
         options: >-
-          --health-cmd="mysqladmin ping -h 127.0.0.1 --silent"
+          --health-cmd="pg_isready -U auratech_user -d laptop_agency_db"
           --health-interval=10s
           --health-timeout=5s
           --health-retries=5
@@ -30,13 +31,13 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: "8.2"
-          extensions: mysqli, pdo, pdo_mysql
+          extensions: pgsql, pdo, pdo_pgsql
 
       - name: Install dependencies (if any)
         run: |
           php -v
 
-      - name: Wait for MySQL to be ready
+      - name: Wait for PostgreSQL to be ready
         run: |
           sleep 20
 
@@ -47,10 +48,8 @@ jobs:
       - name: Test DB Connection
         run: |
           php -r "
-          \$conn = new mysqli('127.0.0.1', 'root', '', 'laptop_agency_db');
-          if (\$conn->connect_error) {
-            die('DB Connection Failed');
-          }
+          \$pdo = new PDO('pgsql:host=127.0.0.1;port=5432;dbname=laptop_agency_db', 'auratech_user', 'test_password');
+          \$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
           echo 'DB Connected Successfully';
           "
 

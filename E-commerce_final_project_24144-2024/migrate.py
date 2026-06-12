@@ -2,7 +2,7 @@ import os
 import pathlib
 import sys
 
-import pymysql
+import psycopg2
 
 
 def env_value(name, default=None, required=False):
@@ -15,24 +15,25 @@ def env_value(name, default=None, required=False):
 
 sql_path = pathlib.Path(__file__).with_name("database.sql")
 sql_text = sql_path.read_text(encoding="utf-8")
+database_url = os.getenv("DATABASE_URL")
 
-connection = pymysql.connect(
-    host=env_value("DB_HOST", "127.0.0.1"),
-    port=int(env_value("DB_PORT", "3306")),
-    user=env_value("DB_USERNAME", required=True),
-    password=env_value("DB_PASSWORD", ""),
-    database=env_value("DB_DATABASE", required=True),
-    autocommit=False,
-)
+if database_url:
+    connection = psycopg2.connect(database_url)
+else:
+    connection = psycopg2.connect(
+        host=env_value("DB_HOST", "127.0.0.1"),
+        port=int(env_value("DB_PORT", "5432")),
+        user=env_value("DB_USERNAME", required=True),
+        password=env_value("DB_PASSWORD", ""),
+        dbname=env_value("DB_DATABASE", required=True),
+        sslmode=env_value("DB_SSLMODE"),
+    )
 
 try:
     with connection.cursor() as cursor:
-        for statement in sql_text.split(";"):
-            statement = statement.strip()
-            if statement:
-                cursor.execute(statement)
+        cursor.execute(sql_text)
     connection.commit()
-    print("MySQL schema and seed data imported from database.sql")
+    print("PostgreSQL schema and seed data imported from database.sql")
 except Exception:
     connection.rollback()
     raise

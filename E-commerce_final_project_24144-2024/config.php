@@ -15,7 +15,7 @@ function initialize_database(PDO $pdo): void
 {
     $pdo->exec("
         CREATE TABLE IF NOT EXISTS users (
-            id INT AUTO_INCREMENT PRIMARY KEY,
+            id SERIAL PRIMARY KEY,
             username VARCHAR(100) NOT NULL UNIQUE,
             password VARCHAR(255) NOT NULL,
             role VARCHAR(50) DEFAULT 'admin'
@@ -24,10 +24,10 @@ function initialize_database(PDO $pdo): void
 
     $pdo->exec("
         CREATE TABLE IF NOT EXISTS products (
-            id INT AUTO_INCREMENT PRIMARY KEY,
+            id SERIAL PRIMARY KEY,
             name VARCHAR(255) NOT NULL,
             brand VARCHAR(100) NOT NULL,
-            product_type ENUM('Laptop', 'Accessory') NOT NULL,
+            product_type VARCHAR(50) NOT NULL CHECK (product_type IN ('Laptop', 'Accessory')),
             description TEXT,
             price DECIMAL(10, 2) NOT NULL,
             stock_quantity INT DEFAULT 10,
@@ -37,21 +37,21 @@ function initialize_database(PDO $pdo): void
 
     $pdo->exec("
         CREATE TABLE IF NOT EXISTS orders (
-            id INT AUTO_INCREMENT PRIMARY KEY,
+            id SERIAL PRIMARY KEY,
             customer_name VARCHAR(255) NOT NULL,
             customer_email VARCHAR(255) NOT NULL,
             customer_phone VARCHAR(50) NOT NULL,
             delivery_address TEXT NOT NULL,
             payment_method VARCHAR(50) DEFAULT 'Mobile Money',
             total_amount DECIMAL(10, 2) NOT NULL,
-            order_status ENUM('Pending', 'Paid', 'Shipped', 'Completed') DEFAULT 'Pending',
+            order_status VARCHAR(50) DEFAULT 'Pending' CHECK (order_status IN ('Pending', 'Paid', 'Shipped', 'Completed')),
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )
     ");
 
     $pdo->exec("
         CREATE TABLE IF NOT EXISTS order_items (
-            id INT AUTO_INCREMENT PRIMARY KEY,
+            id SERIAL PRIMARY KEY,
             order_id INT NOT NULL,
             product_id INT NOT NULL,
             quantity INT NOT NULL,
@@ -85,40 +85,53 @@ function initialize_database(PDO $pdo): void
     ");
 }
 
-$databaseUrl = env_value('DATABASE_URL');
-$host = null;
-$port = null;
-$dbname = null;
-$user = null;
-$pass = null;
+function build_pgsql_dsn(): array
+{
+    $databaseUrl = env_value('DATABASE_URL');
 
-if ($databaseUrl) {
-    $url = parse_url($databaseUrl);
-    $scheme = $url['scheme'] ?? 'mysql';
+    if ($databaseUrl) {
+        $url = parse_url($databaseUrl);
+        $scheme = $url['scheme'] ?? 'postgresql';
 
-    if (!in_array($scheme, ['mysql', 'mysql2', 'mariadb'], true)) {
-        die('DATABASE_URL must use mysql:// or mariadb:// for this project.');
+        if (!in_array($scheme, ['postgres', 'postgresql'], true)) {
+            die('DATABASE_URL must use postgres:// or postgresql:// for this project.');
+        }
+
+        $host = $url['host'] ?? null;
+        $port = isset($url['port']) ? (string) $url['port'] : '5432';
+        $dbname = ltrim($url['path'] ?? '', '/');
+        $user = isset($url['user']) ? rawurldecode($url['user']) : null;
+        $pass = isset($url['pass']) ? rawurldecode($url['pass']) : '';
+        $query = [];
+
+        if (isset($url['query'])) {
+            parse_str($url['query'], $query);
+        }
+
+        $sslmode = $query['sslmode'] ?? env_value('DB_SSLMODE');
+    } else {
+        $host = env_value('DB_HOST', '127.0.0.1');
+        $port = env_value('DB_PORT', '5432');
+        $dbname = env_value('DB_DATABASE');
+        $user = env_value('DB_USERNAME');
+        $pass = env_value('DB_PASSWORD', '');
+        $sslmode = env_value('DB_SSLMODE');
     }
 
-    $host = $url['host'] ?? null;
-    $port = isset($url['port']) ? (string) $url['port'] : '3306';
-    $dbname = ltrim($url['path'] ?? '', '/');
-    $user = isset($url['user']) ? rawurldecode($url['user']) : null;
-    $pass = isset($url['pass']) ? rawurldecode($url['pass']) : '';
-} else {
-    $host = env_value('DB_HOST', '127.0.0.1');
-    $port = env_value('DB_PORT', '3306');
-    $dbname = env_value('DB_DATABASE');
-    $user = env_value('DB_USERNAME');
-    $pass = env_value('DB_PASSWORD', '');
+    if (!$host || !$port || !$dbname || !$user) {
+        die('Database environment variables are incomplete.');
+    }
+
+    $dsn = "pgsql:host={$host};port={$port};dbname={$dbname}";
+
+    if ($sslmode) {
+        $dsn .= ";sslmode={$sslmode}";
+    }
+
+    return [$dsn, $user, $pass];
 }
 
-if (!$host || !$port || !$dbname || !$user) {
-    die('Database environment variables are incomplete.');
-}
-
-$charset = env_value('DB_CHARSET', 'utf8mb4');
-$dsn = "mysql:host={$host};port={$port};dbname={$dbname};charset={$charset}";
+[$dsn, $user, $pass] = build_pgsql_dsn();
 
 try {
     $pdo = new PDO($dsn, $user, $pass, [

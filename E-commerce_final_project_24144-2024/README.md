@@ -1,6 +1,6 @@
 # AuraTech E-commerce Final Project
 
-Plain PHP 8.2 e-commerce web application using Apache and MySQL.
+Plain PHP 8.2 e-commerce web application using Apache and PostgreSQL.
 
 ## Docker Local Test
 
@@ -22,7 +22,7 @@ Stop the containers:
 docker compose down
 ```
 
-Reset the local MySQL volume and seed data:
+Reset the local PostgreSQL volume and seed data:
 
 ```powershell
 docker compose down -v
@@ -31,15 +31,23 @@ docker compose up --build
 
 ## Required Environment Variables
 
-The PHP app reads either a MySQL `DATABASE_URL` or the separate variables below:
+On Render, the easiest setup is to use the included `render.yaml` Blueprint. It creates a free Render PostgreSQL database and passes its connection string to the web service as `DATABASE_URL`.
+
+The app reads either `DATABASE_URL` or the separate PostgreSQL variables below:
 
 ```text
-DB_HOST=your-mysql-host
-DB_PORT=3306
+DATABASE_URL=postgresql://user:password@host:5432/laptop_agency_db
+```
+
+or:
+
+```text
+DB_HOST=your-postgres-host
+DB_PORT=5432
 DB_DATABASE=laptop_agency_db
-DB_USERNAME=your-mysql-user
-DB_PASSWORD=your-mysql-password
-DB_CHARSET=utf8mb4
+DB_USERNAME=your-postgres-user
+DB_PASSWORD=your-postgres-password
+DB_SSLMODE=require
 AUTO_INIT_DB=true
 ```
 
@@ -51,24 +59,28 @@ PORT=10000
 
 ## Render Deployment
 
-This project uses MySQL-specific SQL features such as `AUTO_INCREMENT` and MySQL `ENUM`, so use MySQL for deployment. Do not use Render PostgreSQL unless you also convert the schema and PHP database behavior to PostgreSQL.
+This project is configured for Render using Docker and Render PostgreSQL.
 
-Recommended database options:
+Recommended no-card path:
 
-- Render private MySQL service with a persistent disk.
-- External managed MySQL provider.
+1. Push the latest code to GitHub.
+2. In Render, create a new Blueprint from this repository.
+3. Keep the Blueprint path as `render.yaml`.
+4. Render will create:
+   - Docker web service: `auratech-ecommerce`
+   - Free PostgreSQL database: `auratech-postgres`
+5. Deploy the Blueprint.
 
-After creating the production MySQL database, import `database.sql` into that database.
-Alternatively, leave `AUTO_INIT_DB=true` and the app will create the tables and seed products the first time it connects.
+The app has `AUTO_INIT_DB=true`, so it creates the PostgreSQL tables and seed products the first time it connects.
 
-In the Render dashboard:
+Manual web service settings, if you are not using Blueprint:
 
-1. Create a new Web Service from the GitHub repository.
-2. Choose Docker as the runtime.
-3. If deploying manually, set the root directory to `E-commerce_final_project_24144-2024`.
-4. Use `E-commerce_final_project_24144-2024/Dockerfile` as the Dockerfile path if Render asks for it.
-5. Set the health check path to `/health`.
-6. Add the required MySQL environment variables.
-7. Deploy the service.
-
-The repository also includes a root-level `render.yaml` Blueprint for Docker deployment.
+1. Create a free Render PostgreSQL database.
+2. Create a new Web Service from the GitHub repository.
+3. Choose Docker as the runtime.
+4. Set root directory to `E-commerce_final_project_24144-2024`.
+5. Use `E-commerce_final_project_24144-2024/Dockerfile` as the Dockerfile path if Render asks for it.
+6. Set the health check path to `/health`.
+7. Add `DATABASE_URL` from the Render PostgreSQL database.
+8. Add `AUTO_INIT_DB=true`.
+9. Deploy the service.
