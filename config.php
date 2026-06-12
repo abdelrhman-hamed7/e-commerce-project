@@ -1,10 +1,26 @@
 <?php
 
+$DATABASE_URL = getenv("DATABASE_URL");
+
+if (!$DATABASE_URL) {
+    die("DATABASE_URL is not set in environment variables");
+}
+
+$url = parse_url($DATABASE_URL);
+
+$host = $url["host"];
+$port = $url["port"] ?? 5432;
+$dbname = ltrim($url["path"], "/");
+$user = $url["user"];
+$pass = $url["pass"];
+
+$dsn = "pgsql:host=$host;port=$port;dbname=$dbname";
+
 try {
-    $pdo = new PDO(getenv("postgresql://laptop_agency_db_user:73FLP2oCrT2bIQJ9RgUba4gWqkuUC2Qc@dpg-d8ls8vl8nd3s73a6hogg-a.oregon-postgres.render.com/laptop_agency_db"));
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
-    
+    $pdo = new PDO($dsn, $user, $pass, [
+        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
+    ]);
 } catch (PDOException $e) {
     die("Database Connection Failed: " . $e->getMessage());
 }
