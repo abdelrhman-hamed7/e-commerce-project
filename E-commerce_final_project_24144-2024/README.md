@@ -40,6 +40,7 @@ DB_DATABASE=laptop_agency_db
 DB_USERNAME=your-mysql-user
 DB_PASSWORD=your-mysql-password
 DB_CHARSET=utf8mb4
+AUTO_INIT_DB=true
 ```
 
 For Render, also set:
@@ -58,6 +59,7 @@ Recommended database options:
 - External managed MySQL provider.
 
 After creating the production MySQL database, import `database.sql` into that database.
+Alternatively, leave `AUTO_INIT_DB=true` and the app will create the tables and seed products the first time it connects.
 
 In the Render dashboard:
 

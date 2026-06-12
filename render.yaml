@@ -23,3 +23,5 @@ services:
         sync: false
       - key: DB_CHARSET
         value: utf8mb4
+      - key: AUTO_INIT_DB
+        value: true
