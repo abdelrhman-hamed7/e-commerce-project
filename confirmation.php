@@ -1,5 +1,4 @@
 <?php
-// Session initialization (must be first)
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
@@ -13,16 +12,15 @@ if ($order_id <= 0) {
     exit();
 }
 
-// Fetch order safely
+/* =========================
+   FETCH ORDER (PDO FIX)
+========================= */
 $sql = "SELECT * FROM orders WHERE id = ?";
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("i", $order_id);
-$stmt->execute();
+$stmt = $pdo->prepare($sql);
+$stmt->execute([$order_id]);
+$order = $stmt->fetch(PDO::FETCH_ASSOC);
 
-$result = $stmt->get_result();
-$order = $result->fetch_assoc();
-
-// If order not found
+/* If order not found */
 if (!$order) {
     header("Location: index.php");
     exit();
@@ -74,7 +72,6 @@ if (!$order) {
         .luminous-icon {
             font-size: 4rem;
             color: var(--neon-cyan);
-            text-shadow: 0 0 20px rgba(6,182,212,0.6);
         }
 
         .metrics-panel {
@@ -101,12 +98,10 @@ if (!$order) {
             padding: 12px 30px;
             text-decoration: none;
             display: inline-block;
-            transition: 0.3s;
         }
 
         .btn-auratech-submit:hover {
             transform: translateY(-2px);
-            box-shadow: 0 0 25px rgba(6,182,212,0.7);
         }
     </style>
 </head>
@@ -156,7 +151,8 @@ if (!$order) {
     </div>
 
     <p class="mt-4 text-light opacity-75">
-        We will contact you on <strong><?= htmlspecialchars($order['customer_phone']) ?></strong> for delivery details.
+        We will contact you on <strong><?= htmlspecialchars($order['customer_phone']) ?></strong>
+        for delivery details.
     </p>
 
     <a href="index.php" class="btn-auratech-submit mt-3">

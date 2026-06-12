@@ -19,11 +19,9 @@ $view_details = false;
 
 if ($product_id > 0) {
     $sql = "SELECT * FROM products WHERE id = ?";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("i", $product_id);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    $product = $result->fetch_assoc();
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([$product_id]);
+    $product = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if ($product) {
         $view_details = true;
@@ -41,13 +39,11 @@ $search_query = trim($_GET['search'] ?? '');
 ========================= */
 $sql = "SELECT * FROM products WHERE 1=1";
 $params = [];
-$types = "";
 
 /* Category filter */
 if ($selected_category !== 'All') {
     $sql .= " AND product_type = ?";
     $params[] = $selected_category;
-    $types .= "s";
 }
 
 /* Search filter */
@@ -57,22 +53,19 @@ if (!empty($search_query)) {
     $params[] = $search_param;
     $params[] = $search_param;
     $params[] = $search_param;
-    $types .= "sss";
 }
 
 /* Order */
-$sql .= " ORDER BY FIELD(product_type, 'Laptop', 'Accessory'), id DESC";
+$sql .= " ORDER BY id DESC";
 
-/* Prepare */
-$stmt = $conn->prepare($sql);
-
-if (!empty($params)) {
-    $stmt->bind_param($types, ...$params);
-}
-
-$stmt->execute();
-$db_result = $stmt->get_result();
+/* =========================
+   EXECUTE QUERY (PDO FIX)
+========================= */
+$stmt = $pdo->prepare($sql);
+$stmt->execute($params);
+$db_result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -87,45 +80,38 @@ echo $view_details
 </title>
 
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
 
 <style>
-:root {
-    --cyber-bg-top: #0b0f19;
-    --cyber-bg-bottom: #1e1b4b;
-    --neon-cyan: #06b6d4;
-    --text-light: #f8fafc;
-}
-
 body {
     font-family: Arial;
-    background: linear-gradient(180deg, var(--cyber-bg-top), var(--cyber-bg-bottom));
+    background: linear-gradient(180deg, #0b0f19, #1e1b4b);
     color: white;
     min-height: 100vh;
 }
 
-/* باقي CSS كما هو بدون تغيير */
 .product-cyber-card {
     background: rgba(255,255,255,0.07);
     border-radius: 14px;
     padding: 25px;
     border: 1px solid rgba(255,255,255,0.15);
 }
+
 .product-img-container {
     height: 220px;
     display: flex;
     align-items: center;
     justify-content: center;
-    overflow: hidden;
 }
+
 .product-img-inventory {
     width: 100%;
     height: 100%;
     object-fit: cover;
 }
+
 .badge-cyan {
     background: rgba(6,182,212,0.1);
-    color: var(--neon-cyan);
+    color: #06b6d4;
 }
 </style>
 </head>
@@ -150,8 +136,7 @@ body {
         <div class="row g-5">
 
             <div class="col-md-5">
-                <img src="assets/images/products/<?php echo $product['image_url'] ?: 'default.jpg'; ?>"
-                     class="img-fluid">
+                <img src="assets/images/products/<?php echo $product['image_url'] ?: 'default.jpg'; ?>" class="img-fluid">
             </div>
 
             <div class="col-md-7">
@@ -163,22 +148,16 @@ body {
 
                 <p><?php echo htmlspecialchars($product['description']); ?></p>
 
-                <p>
-                    <strong>Stock:</strong>
-                    <?php echo $product['stock_quantity']; ?>
-                </p>
+                <p><strong>Stock:</strong> <?php echo $product['stock_quantity']; ?></p>
 
                 <form action="cart_action.php" method="POST">
                     <input type="hidden" name="product_id" value="<?php echo $product['id']; ?>">
 
-                    <input type="number"
-                           name="quantity"
-                           min="1"
-                           max="<?php echo $product['stock_quantity']; ?>"
-                           value="1">
+                    <input type="number" name="quantity" min="1"
+                           max="<?php echo $product['stock_quantity']; ?>" value="1">
 
                     <button class="btn btn-info"
-                            <?php echo ($product['stock_quantity'] <= 0) ? 'disabled' : ''; ?>>
+                        <?php echo ($product['stock_quantity'] <= 0) ? 'disabled' : ''; ?>>
                         Add to Cart
                     </button>
                 </form>
@@ -194,7 +173,7 @@ body {
 <!-- LIST MODE -->
 <div class="row g-4">
 
-    <?php while ($prod = $db_result->fetch_assoc()): ?>
+    <?php foreach ($db_result as $prod): ?>
 
     <div class="col-md-4">
         <div class="product-cyber-card">
@@ -225,7 +204,7 @@ body {
         </div>
     </div>
 
-    <?php endwhile; ?>
+    <?php endforeach; ?>
 
 </div>
 
