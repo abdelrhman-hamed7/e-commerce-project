@@ -1,7 +1,7 @@
 version: '3.8'
 
 services:
-  # 1. خدمة سيرفر الويب المعتمد لـ AuraTech
+  # Web Service (PHP + Apache)
   web:
     build: .
     container_name: auratech_web_app
@@ -14,20 +14,19 @@ services:
     networks:
       - auratech_network
 
-  # 2. خدمة قاعدة البيانات المركزية لـ AuraTech (MySQL)
+  # PostgreSQL Database
   db:
-    image: mysql:8.0
-    container_name: auratech_mysql_db
+    image: postgres:15
+    container_name: auratech_postgres_db
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: root_password
-      MYSQL_DATABASE: laptop_agency_db
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root_password
+      POSTGRES_DB: laptop_agency_db
     ports:
-      - "3307:3306"
+      - "5432:5432"
     volumes:
-      - db_data:/var/lib/mysql
-      # تشغيل سكريبت الجداول والبيانات تلقائياً عند الإقلاع الأول
-      - ./database.sql:/docker-entrypoint-initdb.d/database.sql
+      - pg_data:/var/lib/postgresql/data
     networks:
       - auratech_network
 
@@ -36,4 +35,4 @@ networks:
     driver: bridge
 
 volumes:
-  db_data:
+  pg_data:
