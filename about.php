@@ -119,8 +119,7 @@
             <div class="col-12">
                 <h2 class="fw-bold mb-3 text-cyber-cyan">Who is AuraTech Agency?</h2>
                 <p class="fs-5 text-light opacity-75 mb-0" style="line-height: 1.8;">
-                    Founded to bridge the gap between high-end international hardware manufacturers and local technology demands, AuraTech operates as a premium authorized hub. We do not just sell corporate laptops and precision accessories; we deploy hardware infrastructures designed to handle dense simulation workloads, advanced software compilation, and scalable system development.
-                </p>
+                    AuraTech was built to make high-quality, international hardware easily accessible for everyone. As an authorized supplier, we deliver premium corporate laptops and accessories designed to give students, developers, and tech teams the reliable performance they need for coding, engineering, and daily operations.
             </div>
         </div>
 
