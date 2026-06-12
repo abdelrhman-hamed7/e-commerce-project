@@ -1,18 +1,7 @@
 <?php
 session_start();
 
-/*
-    Render PostgreSQL Connection (IMPORTANT)
-    Uses DATABASE_URL instead of MySQL credentials
-*/
-
-try {
-    $pdo = new PDO(getenv("DATABASE_URL"));
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
-} catch (PDOException $e) {
-    die("Database Connection Failure: " . $e->getMessage());
-}
+require_once "config.php";
 
 $error = "";
 $success = "";

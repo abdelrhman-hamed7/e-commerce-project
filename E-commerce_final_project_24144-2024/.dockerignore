@@ -1,0 +1,9 @@
+.git
+.github
+.env
+.env.*
+!.env.example
+backup.sql
+check_db.py
+migrate.py
+README.md

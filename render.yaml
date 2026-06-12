@@ -1,0 +1,25 @@
+services:
+  - type: web
+    name: auratech-ecommerce
+    runtime: docker
+    plan: free
+    rootDir: E-commerce_final_project_24144-2024
+    dockerfilePath: E-commerce_final_project_24144-2024/Dockerfile
+    dockerContext: E-commerce_final_project_24144-2024
+    healthCheckPath: /health
+    autoDeployTrigger: commit
+    envVars:
+      - key: PORT
+        value: 10000
+      - key: DB_HOST
+        sync: false
+      - key: DB_PORT
+        value: 3306
+      - key: DB_DATABASE
+        sync: false
+      - key: DB_USERNAME
+        sync: false
+      - key: DB_PASSWORD
+        sync: false
+      - key: DB_CHARSET
+        value: utf8mb4

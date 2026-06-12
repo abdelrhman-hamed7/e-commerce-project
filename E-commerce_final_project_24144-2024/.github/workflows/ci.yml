@@ -12,12 +12,12 @@ jobs:
       mysql:
         image: mysql:8.0
         env:
-          MYSQL_ROOT_PASSWORD: root_password
+          MYSQL_ALLOW_EMPTY_PASSWORD: yes
           MYSQL_DATABASE: laptop_agency_db
         ports:
           - 3306:3306
         options: >-
-          --health-cmd="mysqladmin ping -h 127.0.0.1 -proot_password"
+          --health-cmd="mysqladmin ping -h 127.0.0.1 --silent"
           --health-interval=10s
           --health-timeout=5s
           --health-retries=5
@@ -47,7 +47,7 @@ jobs:
       - name: Test DB Connection
         run: |
           php -r "
-          \$conn = new mysqli('127.0.0.1', 'root', 'root_password', 'laptop_agency_db');
+          \$conn = new mysqli('127.0.0.1', 'root', '', 'laptop_agency_db');
           if (\$conn->connect_error) {
             die('DB Connection Failed');
           }

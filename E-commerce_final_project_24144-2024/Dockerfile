@@ -1,21 +1,17 @@
 FROM php:8.2-apache
 
-# Install system dependencies
-RUN apt-get update && apt-get install -y \
-    libpq-dev \
-    unzip \
-    git
+RUN docker-php-ext-install pdo pdo_mysql mysqli \
+    && a2enmod rewrite
 
-# IMPORTANT: PostgreSQL + PDO driver
-RUN docker-php-ext-install pdo pdo_pgsql pgsql mysqli pdo_mysql
+WORKDIR /var/www/html
 
-# Enable Apache rewrite
-RUN a2enmod rewrite
-
-# Copy project
 COPY . /var/www/html/
+COPY docker/apache-render-entrypoint.sh /usr/local/bin/apache-render-entrypoint
 
-# Permissions
-RUN chown -R www-data:www-data /var/www/html
+RUN chmod +x /usr/local/bin/apache-render-entrypoint \
+    && chown -R www-data:www-data /var/www/html
 
-EXPOSE 80
+EXPOSE 80 10000
+
+ENTRYPOINT ["apache-render-entrypoint"]
+CMD ["apache2-foreground"]
