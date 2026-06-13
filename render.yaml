@@ -3,7 +3,6 @@ services:
     name: auratech-ecommerce
     runtime: docker
     plan: free
-    rootDir: E-commerce_final_project_24144-2024
     dockerfilePath: E-commerce_final_project_24144-2024/Dockerfile
     dockerContext: E-commerce_final_project_24144-2024
     healthCheckPath: /health

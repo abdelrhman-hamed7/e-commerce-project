@@ -78,9 +78,10 @@ Manual web service settings, if you are not using Blueprint:
 1. Create a free Render PostgreSQL database.
 2. Create a new Web Service from the GitHub repository.
 3. Choose Docker as the runtime.
-4. Set root directory to `E-commerce_final_project_24144-2024`.
-5. Use `E-commerce_final_project_24144-2024/Dockerfile` as the Dockerfile path if Render asks for it.
-6. Set the health check path to `/health`.
-7. Add `DATABASE_URL` from the Render PostgreSQL database.
-8. Add `AUTO_INIT_DB=true`.
-9. Deploy the service.
+4. Leave root directory empty.
+5. Set Dockerfile path to `E-commerce_final_project_24144-2024/Dockerfile`.
+6. Set Docker context to `E-commerce_final_project_24144-2024`.
+7. Set the health check path to `/health`.
+8. Add `DATABASE_URL` from the Render PostgreSQL database.
+9. Add `AUTO_INIT_DB=true`.
+10. Deploy the service.
